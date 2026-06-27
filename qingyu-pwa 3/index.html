@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="青魚pwa">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#0066CC">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <title>青魚pwa</title>
+
+  <!-- ============================================================
+    ✏️  使用者可以自由修改以下 CSS 樣式來自訂外觀
+    ❌  請勿刪除或修改 #qy-footer 區塊（版權聲明）
+  ============================================================ -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* ✏️ 可自訂主色 */
+      --brand: #0066CC;
+      --brand-dark: #004d99;
+      --brand-light: #e6f0ff;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: -apple-system, 'PingFang TC', 'Microsoft JhengHei', 'Noto Sans TC', sans-serif;
+      background: #f5f7fa;
+      color: #1a1a2e;
+    }
+
+    /* 整體佈局：內容區 + 固定底部 */
+    .app-wrapper {
+      display: flex;
+      flex-direction: column;
+      min-height: 100dvh;
+    }
+
+    /* ============================================================
+      ✏️ 以下是使用者內容區，可自由替換
+    ============================================================ */
+    .user-content {
+      flex: 1;
+      padding: 0 0 72px; /* 72px = 為底部 footer 留空間 */
+    }
+
+    /* --- Header --- */
+    .app-header {
+      background: var(--brand);
+      color: white;
+      padding: 48px 20px 24px;
+      text-align: center;
+    }
+    .app-header .logo { font-size: 56px; line-height: 1; margin-bottom: 10px; }
+    .app-header h1 { font-size: 22px; font-weight: 700; letter-spacing: 1px; }
+    .app-header p { font-size: 13px; opacity: 0.8; margin-top: 6px; }
+
+    /* --- 內容卡片 --- */
+    .content-section {
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    .card h2 { font-size: 16px; font-weight: 700; color: var(--brand); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .card p  { font-size: 14px; line-height: 1.7; color: #444; }
+
+    .card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .mini-card {
+      background: var(--brand-light);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+    }
+    .mini-card .icon { font-size: 28px; margin-bottom: 6px; }
+    .mini-card .label { font-size: 13px; font-weight: 600; color: var(--brand-dark); }
+    .mini-card .desc  { font-size: 11px; color: #556; margin-top: 3px; line-height: 1.4; }
+
+    /* --- 安裝提示 --- */
+    #install-btn {
+      display: none;
+      width: 100%;
+      padding: 14px;
+      background: var(--brand);
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+    }
+    #install-btn.show { display: block; }
+
+    .ios-guide {
+      display: none;
+      background: #fff8e6;
+      border: 1.5px solid #f0c040;
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .ios-guide.show { display: block; }
+    .ios-guide h3 { font-size: 14px; font-weight: 700; color: #7a5800; margin-bottom: 10px; }
+    .ios-step { display: flex; gap: 10px; font-size: 13px; color: #555; margin-bottom: 8px; align-items: flex-start; line-height: 1.5; }
+    .ios-step .n { background: var(--brand); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+
+
+    /* ============================================================
+      ❌ 以下 #qy-footer 為版權聲明，請勿刪除或修改
+      This footer is required and must not be removed or modified.
+    ============================================================ */
+    #qy-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: rgba(0, 40, 90, 0.96);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      pointer-events: all;
+    }
+    #qy-footer .qy-fish {
+      font-size: 16px;
+      animation: qy-swim 2.5s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    #qy-footer .qy-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.9);
+      font-weight: 600;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+    #qy-footer .qy-text span {
+      color: #66ccff;
+      font-weight: 800;
+    }
+    #qy-footer .qy-badge {
+      background: rgba(102,204,255,0.2);
+      border: 1px solid rgba(102,204,255,0.4);
+      color: #66ccff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      flex-shrink: 0;
+    }
+    @keyframes qy-swim {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-2px) rotate(3deg); }
+      75% { transform: translateY(2px) rotate(-3deg); }
+    }
+    /* ============================================================
+      ❌ 以上 #qy-footer 結束
+    ============================================================ */
+
+  </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+
+  <!-- ============================================================
+    ✏️ 使用者內容區：自由替換以下 HTML
+  ============================================================ -->
+  <div class="user-content">
+
+    <div class="app-header">
+      <div class="logo">🐟</div>
+      <h1>青魚 PWA 模板</h1>
+      <p>可自由替換成你自己的內容</p>
+    </div>
+
+    <div class="content-section">
+
+      <!-- 安裝按鈕（自動偵測環境顯示） -->
+      <button id="install-btn">📲 加入主畫面</button>
+
+      <!-- iOS 說明（自動偵測 iOS 顯示） -->
+      <div class="ios-guide" id="ios-guide">
+        <h3>📲 加入主畫面（iOS）</h3>
+        <div class="ios-step"><div class="n">1</div><div>點 Safari 底部的「分享」按鈕 <strong>⬆</strong></div></div>
+        <div class="ios-step"><div class="n">2</div><div>向下滑動選擇「<strong>加入主畫面</strong>」</div></div>
+        <div class="ios-step"><div class="n">3</div><div>名稱確認為「<strong>青魚pwa</strong>」，點「新增」</div></div>
+      </div>
+
+      <div class="card">
+        <h2>👋 歡迎使用</h2>
+        <p>這是由 <strong>青魚大師</strong> 提供的免費 PWA 模板。你可以自由替換這裡的文字、顏色與內容，打造屬於自己的 App！</p>
+      </div>
+
+      <div class="card">
+        <h2>✏️ 怎麼自訂？</h2>
+        <p>開啟 <code>index.html</code>，修改「使用者內容區」裡的任何 HTML 與 CSS，就能完全自訂畫面。詳細教程請看 <strong>README.md</strong>。</p>
+      </div>
+
+      <div class="card-grid">
+        <div class="mini-card">
+          <div class="icon">⚡</div>
+          <div class="label">極速啟動</div>
+          <div class="desc">如原生 App 流暢</div>
+        </div>
+        <div class="mini-card">
+          <div class="icon">🌐</div>
+          <div class="label">離線可用</div>
+          <div class="desc">無網路也能開啟</div>
+        </div>
+        <div class="mini-card">
+          <div class="icon">📌</div>
+          <div class="label">加入桌面</div>
+          <div class="desc">一鍵釘到主畫面</div>
+        </div>
+        <div class="mini-card">
+          <div class="icon">🆓</div>
+          <div class="label">完全免費</div>
+          <div class="desc">開源可自由使用</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <!-- ✏️ 使用者內容區結束 -->
+
+
+  <!-- ============================================================
+    ❌ 版權聲明 Footer：請勿刪除或修改此區塊
+    Required attribution footer — do not remove or modify.
+  ============================================================ -->
+  <footer id="qy-footer" aria-label="版權聲明">
+    <span class="qy-fish" aria-hidden="true">🐟</span>
+    <span class="qy-text">脆上搜尋 <span>青魚大師</span> 取得更多模板</span>
+    <span class="qy-badge">PWA</span>
+  </footer>
+  <!-- ❌ 版權聲明 Footer 結束 -->
+
+</div><!-- .app-wrapper -->
+
+
+<script>
+// ============================================================
+// PWA 核心腳本（請勿刪除）
+// ============================================================
+
+// Service Worker 註冊
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+// Android / Chrome：安裝提示
+let deferredPrompt;
+const installBtn = document.getElementById('install-btn');
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.classList.add('show');
+});
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') installBtn.classList.remove('show');
+  deferredPrompt = null;
+});
+window.addEventListener('appinstalled', () => installBtn.classList.remove('show'));
+
+// iOS Safari：顯示手動安裝說明
+const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+const isStandalone = window.navigator.standalone;
+if (isIos && !isStandalone) {
+  document.getElementById('ios-guide').classList.add('show');
+}
+
+// ============================================================
+// ✏️ 以下可加入你自己的 JavaScript
+// ============================================================
+
+</script>
+
+</body>
+</html>
