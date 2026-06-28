@@ -129,7 +129,8 @@ qingyu-pwa/
 ```
 
 ---
-（補充）用 Netlify 部署的方法
+補充
+用 Netlify 部署的方法
 如果不想用 GitHub Pages，Netlify 也是免費又簡單的選擇，網址會是 你取的名字.netlify.app。
 
 方法一：直接拖曳資料夾（最快，不需要帳號以外的操作）
