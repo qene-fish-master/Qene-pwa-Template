@@ -129,6 +129,39 @@ qingyu-pwa/
 ```
 
 ---
+（補充）用 Netlify 部署的方法
+如果不想用 GitHub Pages，Netlify 也是免費又簡單的選擇，網址會是 你取的名字.netlify.app。
+
+方法一：直接拖曳資料夾（最快，不需要帳號以外的操作）
+
+把 Fork 下來的專案下載到電腦（GitHub 上點 Code → Download ZIP，解壓縮）
+前往 netlify.com 並登入（可用 GitHub 帳號登入）
+進入 Dashboard 後，把整個資料夾直接拖曳到頁面中間的拖曳區
+等幾秒，Netlify 會自動產生一個網址，部署完成
+
+
+方法二：連結 GitHub 倉庫（推薦，之後改程式碼會自動更新）
+
+前往 netlify.com 並登入
+點 Add new site → Import an existing project
+選 Deploy with GitHub，授權後選你 Fork 的倉庫
+設定保持預設即可，直接點 Deploy site
+部署完成後會給你一個網址
+
+之後只要在 GitHub 上修改檔案，Netlify 會自動重新部署，不需要手動操作。
+
+修改 Netlify 網址
+預設網址是一串亂碼，可以改成自訂名稱：
+
+進入 Netlify 的 Site settings
+點 Change site name
+輸入你想要的名稱（如 my-app），網址就會變成 my-app.netlify.app
+
+
+注意事項
+
+網址必須是 https:// 開頭，PWA 功能才能正常運作，Netlify 預設就是 https，不需要額外設定
+免費方案每月有流量限制，個人使用完全夠用
 
 ## 🤔 常見問題
 
